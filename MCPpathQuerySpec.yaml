@@ -1,0 +1,46 @@
+openapi: 3.0.3
+
+info:
+  title: MCP Path Query Parameter API
+  version: 1.0.0
+  description: API for validating MCP GET tool with path and query parameters
+
+servers:
+  - url: https://httpbin.org
+
+paths:
+
+  /users/{id}:
+    get:
+      operationId: getUserById
+      summary: Get user by ID
+      description: Get a user using a path parameter and an optional query parameter
+
+      parameters:
+
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "123"
+
+        - name: includeOrders
+          in: query
+          required: false
+          description: Include orders for the user
+          schema:
+            type: boolean
+          example: true
+
+      responses:
+
+        '200':
+          description: Successful response
+
+        '400':
+          description: Bad request
+
+        '404':
+          description: User not found
