@@ -1,0 +1,89 @@
+openapi: 3.0.3
+
+info:
+  title: Customer Information API
+  version: 1.0.0
+  description: API for retrieving customer information with required headers.
+
+servers:
+  - url: https://api.example.com
+
+components:
+
+  securitySchemes:
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  /customers:
+
+    get:
+
+      summary: Get Customer Information
+      operationId: getCustomerInformation
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+
+        - name: X-Request-ID
+          in: header
+          required: true
+          description: Unique identifier for the request
+          schema:
+            type: string
+          example: req-123456789
+
+        - name: X-Client-ID
+          in: header
+          required: true
+          description: Identifier of the calling client
+          schema:
+            type: string
+          example: client-001
+
+        - name: X-API-Version
+          in: header
+          required: true
+          description: API version requested by the client
+          schema:
+            type: string
+          example: v1
+
+      responses:
+
+        '200':
+          description: Customer information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  customerId:
+                    type: string
+                    example: CUST001
+
+                  name:
+                    type: string
+                    example: John Doe
+
+                  status:
+                    type: string
+                    example: ACTIVE
+
+        '400':
+          description: Bad Request
+
+        '401':
+          description: Missing or invalid Authorization
+
+        '403':
+          description: Missing or invalid required headers
+
+        '500':
+          description: Internal Server Error
