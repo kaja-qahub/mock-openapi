@@ -1,0 +1,177 @@
+openapi: 3.0.3
+
+info:
+  title: Multi-Resource Test API
+  version: 1.0.0
+  description: >
+    Simple OpenAPI specification for validating multiple resource paths
+    through the API Manager Gateway.
+
+servers:
+  - url: https://example.com
+
+paths:
+
+  # ============================================================
+  # RESOURCE 1 - GET /pets
+  # ============================================================
+  /pets:
+    get:
+      summary: Get all pets
+      operationId: getPets
+      responses:
+        '200':
+          description: Successfully retrieved pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+
+    # ==========================================================
+    # RESOURCE 1 - POST /pets
+    # ==========================================================
+    post:
+      summary: Create a pet
+      operationId: createPet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetRequest'
+      responses:
+        '201':
+          description: Pet created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+
+
+  # ============================================================
+  # RESOURCE 2 - GET /pet-details
+  # ============================================================
+  /pet-details:
+    get:
+      summary: Get pet details
+      operationId: getPetDetails
+      responses:
+        '200':
+          description: Successfully retrieved pet details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+
+
+  # ============================================================
+  # RESOURCE 3 - POST /orders
+  # ============================================================
+  /orders:
+    post:
+      summary: Create an order
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '200':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+
+
+  # ============================================================
+  # RESOURCE 4 - DELETE /pets/delete
+  # ============================================================
+  /pets/delete:
+    delete:
+      summary: Delete a pet
+      operationId: deletePet
+      responses:
+        '204':
+          description: Pet deleted successfully
+
+
+components:
+
+  schemas:
+
+    # ==========================================================
+    # Pet response
+    # ==========================================================
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 100
+        name:
+          type: string
+          example: Buddy
+        tag:
+          type: string
+          example: automation
+
+
+    # ==========================================================
+    # Pet request
+    # ==========================================================
+    PetRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: AutomationPet
+        tag:
+          type: string
+          example: test
+
+
+    # ==========================================================
+    # Order request
+    # ==========================================================
+    OrderRequest:
+      type: object
+      required:
+        - petId
+        - quantity
+      properties:
+        petId:
+          type: integer
+          example: 100
+        quantity:
+          type: integer
+          example: 1
+        status:
+          type: string
+          example: placed
+
+
+    # ==========================================================
+    # Order response
+    # ==========================================================
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 500
+        petId:
+          type: integer
+          example: 100
+        quantity:
+          type: integer
+          example: 1
+        status:
+          type: string
+          example: placed
