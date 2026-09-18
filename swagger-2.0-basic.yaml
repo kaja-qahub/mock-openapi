@@ -1,0 +1,38 @@
+swagger: "2.0"
+
+info:
+  title: Basic Customer API
+  description: Basic API for gateway validation
+  version: "1.0.0"
+
+host: mock.example.com
+basePath: /api
+schemes:
+  - https
+
+paths:
+  /customers:
+    get:
+      summary: Get customers
+      description: Retrieve customer details
+      operationId: getCustomers
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Customer"
+
+definitions:
+  Customer:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
