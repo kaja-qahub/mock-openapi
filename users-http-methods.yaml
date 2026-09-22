@@ -1,0 +1,261 @@
+swagger: "2.0"
+
+info:
+  title: Users API - All HTTP Methods
+  description: API specification for testing GET, POST, PUT, PATCH and DELETE methods.
+  version: "1.0.0"
+
+host: 35.207.4.105:7000
+basePath: /
+schemes:
+  - http
+
+paths:
+
+  /users:
+
+    get:
+      summary: Get users
+      description: Retrieve users.
+      operationId: getUsers
+      produces:
+        - application/json
+
+      responses:
+        "200":
+          description: Users retrieved successfully
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+
+        "500":
+          description: Internal server error
+
+
+    post:
+      summary: Create a user
+      description: Creates a new user.
+      operationId: createUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: User information.
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - phone
+            properties:
+              name:
+                type: string
+                example: "John Doe"
+              email:
+                type: string
+                example: "john.doe@example.com"
+              phone:
+                type: string
+                example: "0771234567"
+
+      responses:
+        "201":
+          description: User created successfully
+          schema:
+            type: object
+
+        "400":
+          description: Invalid request
+
+        "500":
+          description: Internal server error
+
+
+  /users/{userId}:
+
+    get:
+      summary: Get user by ID
+      description: Retrieve a specific user using the user ID.
+      operationId: getUserById
+      produces:
+        - application/json
+
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: Unique identifier of the user.
+          example: "1790056782082"
+
+      responses:
+        "200":
+          description: User retrieved successfully
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+
+        "404":
+          description: User not found
+
+        "500":
+          description: Internal server error
+
+
+    put:
+      summary: Update a user
+      description: Updates an existing user.
+      operationId: updateUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: Unique identifier of the user.
+          example: "1790056782082"
+
+        - name: body
+          in: body
+          required: true
+          description: User information.
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - phone
+            properties:
+              name:
+                type: string
+                example: "John Doe"
+              email:
+                type: string
+                example: "john.doe@example.com"
+              phone:
+                type: string
+                example: "0771234567"
+
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            type: object
+
+        "400":
+          description: Invalid request
+
+        "404":
+          description: User not found
+
+        "500":
+          description: Internal server error
+
+
+    patch:
+      summary: Partially update a user
+      description: Updates selected fields of an existing user.
+      operationId: patchUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: Unique identifier of the user.
+          example: "1790056782082"
+
+        - name: body
+          in: body
+          required: true
+          description: Fields to update.
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "John Updated"
+              email:
+                type: string
+                example: "john.updated@example.com"
+              phone:
+                type: string
+                example: "0771234567"
+
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            type: object
+
+        "400":
+          description: Invalid request
+
+        "404":
+          description: User not found
+
+        "500":
+          description: Internal server error
+
+
+    delete:
+      summary: Delete a user
+      description: Deletes a user using the user ID.
+      operationId: deleteUser
+      consumes:
+        - application/json
+
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: Unique identifier of the user.
+          example: "1790056782083"
+
+      responses:
+        "200":
+          description: User deleted successfully
+
+        "204":
+          description: User deleted successfully
+
+        "400":
+          description: Invalid user ID
+
+        "404":
+          description: User not found
+
+        "500":
+          description: Internal server error
