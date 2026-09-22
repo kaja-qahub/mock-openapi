@@ -1,0 +1,139 @@
+openapi: 3.0.3
+
+info:
+  title: Multiple HTTP Methods Same Resource API
+  description: API for validating MCP Gateway routing for multiple HTTP methods on the same resource
+  version: 1.0.0
+
+servers:
+  - url: https://mock.example.com/api
+
+paths:
+  /users:
+
+    get:
+      summary: Get users
+      description: Returns all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+              example:
+                - id: 1
+                  name: John
+                - id: 2
+                  name: Jane
+
+    post:
+      summary: Create user
+      description: Creates a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+              example:
+                name: Alice
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              example:
+                id: 3
+                name: Alice
+
+    put:
+      summary: Update user
+      description: Updates an existing user
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              example:
+                name: Updated John
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Updated John
+
+    patch:
+      summary: Partially update user
+      description: Partially updates an existing user
+      operationId: patchUser
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              example:
+                name: Patched John
+      responses:
+        '200':
+          description: User partially updated successfully
+          content:
+            application/json:
+              example:
+                id: 1
+                name: Patched John
+
+    delete:
+      summary: Delete user
+      description: Deletes an existing user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '204':
+          description: User deleted successfully
