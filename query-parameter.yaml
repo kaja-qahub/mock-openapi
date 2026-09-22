@@ -1,0 +1,96 @@
+openapi: 3.0.3
+
+info:
+  title: Customer Bill Query Parameter API
+  description: API used to validate Gateway query parameter handling
+  version: "1.0.0"
+
+servers:
+  - url: https://mock.example.com/api
+
+paths:
+  /customerBill:
+    get:
+      summary: Get customer bills
+      operationId: getCustomerBills
+
+      parameters:
+        - name: fields
+          in: query
+          required: false
+          description: Comma-separated fields to return
+          schema:
+            type: string
+            example: id,name
+
+        - name: offset
+          in: query
+          required: false
+          description: Number of records to skip
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+            example: 0
+
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of records to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+            example: 10
+
+      responses:
+        "200":
+          description: Customer bills retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    type: integer
+                  limit:
+                    type: integer
+                  fields:
+                    type: string
+                  customers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        billAmount:
+                          type: number
+                          format: double
+
+              example:
+                offset: 0
+                limit: 10
+                fields: id,name
+                customers:
+                  - id: 1
+                    name: John
+                    billAmount: 125.50
+                  - id: 2
+                    name: Alice
+                    billAmount: 250.75
+
+        "400":
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
