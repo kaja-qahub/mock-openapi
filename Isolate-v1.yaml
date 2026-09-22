@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  title: MCP Replacement TC1 - Version 1
+  version: 1.0.0
+
+servers:
+  - url: https://httpbin.org
+
+paths:
+  /customers:
+    get:
+      operationId: getCustomers
+      summary: Get customers
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
