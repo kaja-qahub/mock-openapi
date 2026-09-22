@@ -1,0 +1,222 @@
+swagger: "2.0"
+
+info:
+  title: Complex Order API
+  description: API for validating nested and complex request payloads through MCP Gateway
+  version: "1.0.0"
+
+host: mock.example.com
+basePath: /api
+schemes:
+  - https
+
+consumes:
+  - application/json
+
+produces:
+  - application/json
+
+paths:
+
+  /orders:
+    post:
+      summary: Create order
+      description: Creates an order using a complex nested request payload
+      operationId: createOrder
+
+      parameters:
+        - name: orderRequest
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/OrderRequest"
+
+      responses:
+        "201":
+          description: Order created successfully
+          schema:
+            $ref: "#/definitions/OrderResponse"
+
+        "400":
+          description: Invalid request
+
+        "500":
+          description: Internal server error
+
+
+definitions:
+
+  OrderRequest:
+
+    type: object
+    required:
+      - orderId
+      - customer
+      - shippingAddress
+      - items
+      - payment
+
+    properties:
+
+      orderId:
+        type: string
+        example: ORD-1001
+
+      customer:
+        type: object
+        required:
+          - customerId
+          - name
+          - contact
+        properties:
+
+          customerId:
+            type: string
+            example: CUST-001
+
+          name:
+            type: string
+            example: John Doe
+
+          contact:
+            type: object
+            required:
+              - email
+              - phone
+            properties:
+
+              email:
+                type: string
+                example: john.doe@example.com
+
+              phone:
+                type: string
+                example: "+94771234567"
+
+      shippingAddress:
+        type: object
+        required:
+          - addressLine1
+          - city
+          - country
+        properties:
+
+          addressLine1:
+            type: string
+            example: "123 Main Street"
+
+          addressLine2:
+            type: string
+            example: "Apartment 5A"
+
+          city:
+            type: string
+            example: Colombo
+
+          postalCode:
+            type: string
+            example: "00100"
+
+          country:
+            type: string
+            example: Sri Lanka
+
+      items:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          required:
+            - productId
+            - productName
+            - quantity
+            - price
+          properties:
+
+            productId:
+              type: string
+              example: PROD-001
+
+            productName:
+              type: string
+              example: Laptop
+
+            quantity:
+              type: integer
+              format: int32
+              example: 2
+
+            price:
+              type: number
+              format: double
+              example: 125000.50
+
+            attributes:
+              type: object
+              properties:
+
+                color:
+                  type: string
+                  example: Silver
+
+                warranty:
+                  type: string
+                  example: "2 years"
+
+      payment:
+        type: object
+        required:
+          - method
+          - currency
+        properties:
+
+          method:
+            type: string
+            enum:
+              - CARD
+              - CASH
+              - BANK_TRANSFER
+            example: CARD
+
+          currency:
+            type: string
+            example: LKR
+
+          billingAddress:
+            type: object
+            properties:
+
+              addressLine1:
+                type: string
+                example: "456 Park Road"
+
+              city:
+                type: string
+                example: Colombo
+
+              country:
+                type: string
+                example: Sri Lanka
+
+
+  OrderResponse:
+
+    type: object
+    properties:
+
+      orderId:
+        type: string
+        example: ORD-1001
+
+      status:
+        type: string
+        example: CREATED
+
+      message:
+        type: string
+        example: Order created successfully
+
+      totalAmount:
+        type: number
+        format: double
+        example: 250001.00
