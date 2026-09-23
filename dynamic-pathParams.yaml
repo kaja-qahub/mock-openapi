@@ -1,0 +1,47 @@
+swagger: "2.0"
+
+info:
+  title: Dynamic Path Parameter API
+  description: API for validating MCP Gateway dynamic path parameters
+  version: "1.0.0"
+
+host: mock.example.com
+basePath: /api
+schemes:
+  - https
+
+paths:
+
+  /users/{id}:
+
+    get:
+      summary: Get user by ID
+      description: Retrieve a user using a dynamic user ID
+      operationId: getUserById
+
+      parameters:
+        - name: id
+          in: path
+          description: Dynamic user ID
+          required: true
+          type: string
+
+      produces:
+        - application/json
+
+      responses:
+
+        "200":
+          description: User retrieved successfully
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              email:
+                type: string
+
+        "404":
+          description: User not found
