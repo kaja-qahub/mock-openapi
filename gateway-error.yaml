@@ -5,7 +5,7 @@ info:
   description: API used to validate Gateway handling of backend errors
   version: "1.0.0"
 
-host: mock.example.com
+host: <YOUR-REAL-MOCK-BACKEND-HOST>
 basePath: /api
 schemes:
   - https
@@ -15,12 +15,13 @@ paths:
   /customers:
     get:
       summary: Get customers - backend error
-      description: Endpoint intentionally returns HTTP 500 for Gateway error validation
+      description: Returns HTTP 500 from the backend
       operationId: getCustomersBackendError
       produces:
         - application/json
 
       responses:
+
         "200":
           description: Successful response
           schema:
