@@ -1,0 +1,159 @@
+openapi: 3.0.3
+
+info:
+  title: Customer Order API
+  description: API for creating a customer with a nested order
+  version: 1.0.0
+
+servers:
+  - url: https://example.com
+
+paths:
+  /customers:
+    post:
+      summary: Create customer with order
+      description: Creates a customer together with address and order details.
+      operationId: createCustomerWithOrder
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerRequest'
+
+      responses:
+        '200':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCustomerResponse'
+
+        '400':
+          description: Invalid request
+
+components:
+
+  schemas:
+
+    CreateCustomerRequest:
+      type: object
+      required:
+        - customer
+        - address
+        - order
+
+      properties:
+
+        customer:
+          type: object
+          required:
+            - customerId
+            - name
+            - email
+
+          properties:
+            customerId:
+              type: string
+              example: CUST001
+
+            name:
+              type: string
+              example: John Doe
+
+            email:
+              type: string
+              format: email
+              example: john.doe@example.com
+
+            age:
+              type: integer
+              example: 30
+
+        address:
+          type: object
+          required:
+            - city
+            - country
+
+          properties:
+            street:
+              type: string
+              example: 123 Main Street
+
+            city:
+              type: string
+              example: Colombo
+
+            postalCode:
+              type: string
+              example: 00100
+
+            country:
+              type: string
+              example: Sri Lanka
+
+        order:
+          type: object
+          required:
+            - orderId
+            - items
+
+          properties:
+            orderId:
+              type: string
+              example: ORD001
+
+            currency:
+              type: string
+              example: LKR
+
+            items:
+              type: array
+              minItems: 1
+
+              items:
+                type: object
+                required:
+                  - productId
+                  - quantity
+                  - price
+
+                properties:
+                  productId:
+                    type: string
+                    example: PROD001
+
+                  productName:
+                    type: string
+                    example: Mobile Phone
+
+                  quantity:
+                    type: integer
+                    minimum: 1
+                    example: 2
+
+                  price:
+                    type: number
+                    format: double
+                    example: 125000.50
+
+    CreateCustomerResponse:
+      type: object
+      properties:
+        customerId:
+          type: string
+          example: CUST001
+
+        orderId:
+          type: string
+          example: ORD001
+
+        status:
+          type: string
+          example: CREATED
+
+        message:
+          type: string
+          example: Customer and order created successfully
