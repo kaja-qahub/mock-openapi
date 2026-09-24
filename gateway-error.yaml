@@ -1,47 +1,178 @@
-swagger: "2.0"
+openapi: 3.0.0
 
 info:
   title: Gateway Backend Error API
-  description: API used to validate Gateway handling of backend errors
-  version: "1.0.0"
+  description: API used to validate MCP Gateway handling of backend errors
+  version: 1.0.0
 
-host: <YOUR-REAL-MOCK-BACKEND-HOST>
-basePath: /api
-schemes:
-  - https
+servers:
+  - url: http://35.207.4.105:3401
 
 paths:
 
-  /customers:
+  /health:
     get:
-      summary: Get customers - backend error
-      description: Returns HTTP 500 from the backend
-      operationId: getCustomersBackendError
-      produces:
-        - application/json
+      operationId: healthCheck
+      summary: Health check
+      responses:
+        "200":
+          description: Success
+
+  /customers/{id}:
+    get:
+      operationId: getCustomer
+      summary: Get customer
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
 
       responses:
-
         "200":
-          description: Successful response
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
+          description: Customer retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
 
+    put:
+      operationId: updateCustomer
+      summary: Update customer
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+
+      responses:
+        "200":
+          description: Customer updated successfully
+
+    patch:
+      operationId: patchCustomer
+      summary: Partial update customer
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+
+      responses:
+        "200":
+          description: Customer partially updated successfully
+
+    delete:
+      operationId: deleteCustomer
+      summary: Delete customer
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: Customer deleted successfully
+
+  /customers:
+    post:
+      operationId: createCustomer
+      summary: Create customer
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+
+      responses:
+        "201":
+          description: Customer created successfully
+
+  /errors/400:
+    get:
+      operationId: getBadRequest
+      summary: Simulate 400 error
+
+      responses:
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  status:
+                    type: integer
+                  message:
+                    type: string
+
+  /errors/401:
+    get:
+      operationId: getUnauthorized
+      summary: Simulate 401 error
+
+      responses:
+        "401":
+          description: Unauthorized
+
+  /errors/404:
+    get:
+      operationId: getNotFound
+      summary: Simulate 404 error
+
+      responses:
+        "404":
+          description: Not found
+
+  /errors/500:
+    get:
+      operationId: getCustomersBackendError
+      summary: Simulate backend 500 error
+      description: Endpoint intentionally returns HTTP 500 from the backend
+
+      responses:
         "500":
           description: Backend Internal Server Error
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-              status:
-                type: integer
-              message:
-                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  status:
+                    type: integer
+                  message:
+                    type: string
