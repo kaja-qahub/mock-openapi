@@ -1,0 +1,36 @@
+openapi: 3.0.3
+
+info:
+  title: Dynamic Path Parameter API
+  description: API for validating Gateway invocation with a dynamic path parameter
+  version: 1.0.0
+
+servers:
+  - url: https://your-backend-host
+
+paths:
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      operationId: getUserById
+      description: Returns a user using the dynamic path parameter.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+          example: "1"
+
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: string
+              example: "Hello from Vertex"
+
+        "404":
+          description: User not found
