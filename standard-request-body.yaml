@@ -1,0 +1,77 @@
+openapi: 3.0.3
+
+info:
+  title: Standard Request Body API
+  version: 1.0.0
+  description: API for validating standard JSON request body through MCP Gateway
+
+servers:
+  - url: https://your-backend-host
+
+paths:
+  /users:
+    post:
+      summary: Create a user
+      operationId: createUser
+      description: Creates a user using a standard JSON request body.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                  example: Kajana
+                email:
+                  type: string
+                  format: email
+                  example: kajana@example.com
+                phone:
+                  type: string
+                  example: "0771234567"
+
+      responses:
+        "200":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                  - name
+                  - email
+                properties:
+                  id:
+                    type: integer
+                    example: 101
+                  name:
+                    type: string
+                    example: Kajana
+                  email:
+                    type: string
+                    example: kajana@example.com
+                  phone:
+                    type: string
+                    example: "0771234567"
+                  message:
+                    type: string
+                    example: User created successfully
+
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
