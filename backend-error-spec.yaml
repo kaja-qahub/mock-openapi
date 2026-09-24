@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: Mock Backend - Error Scenario API
+  description: >
+    Minimal OpenAPI specification used to provision an MCP-enabled Gateway
+    API whose /users/error operation always resolves against a backend
+    that returns an error response. Used by
+    MCPBackendErrorValidationTest to validate that Gateway correctly
+    surfaces backend errors instead of treating them as successful
+    responses.
+  version: 1.0.0
+
+servers:
+  - url: https://mock-backend.qahub.internal
+    description: Mock backend that always returns an error for this path
+
+paths:
+  /users/error:
+    get:
+      operationId: getUserError
+      summary: Always returns a "user not found" error from the backend
+      description: >
+        This operation is intentionally backed by a mock implementation
+        that responds with a 404 and a structured error body, so it can
+        be used to validate Gateway/MCP error-handling behavior.
+      responses:
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                errorCode: USER_NOT_FOUND
+                message: User not found
+        "200":
+          description: Not expected to occur for this operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - errorCode
+        - message
+      properties:
+        errorCode:
+          type: string
+          example: USER_NOT_FOUND
+        message:
+          type: string
+          example: User not found
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
