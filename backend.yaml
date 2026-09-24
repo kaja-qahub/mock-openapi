@@ -1,0 +1,49 @@
+openapi: 3.0.3
+
+info:
+  title: MCP Backend Error API
+  version: 1.0.0
+  description: GET API for MCP backend error validation
+
+servers:
+  - url: https://httpbin.org
+
+paths:
+
+  /users/error:
+    get:
+      operationId: getUserError
+      summary: Get user - backend error
+      description: This endpoint intentionally returns a backend error.
+
+      responses:
+
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - error
+                  - message
+              example:
+                error: "USER_NOT_FOUND"
+                message: "User not found"
